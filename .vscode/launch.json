@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Develop (chrome)",
+            "request": "launch",
+            "type": "dart",
+            // "flutterMode": "profile",
+            "program": "lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+                "--web-port=3001",
+                "--web-browser-flag=--disable-web-security",
+            ]
+        },
+        {
+            "name": "Develop (edge)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "deviceId": "edge",
+            "args": [
+                "--web-port=3001",
+                "--web-browser-flag=--disable-web-security",
+            ]
+        },
+    ]
+}
