@@ -1,9 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' hide Summary;
 import '../models/models.dart';
 
 class ApiService {
-  static const String _baseUrl = 'https://pns-api.probably-anything.com';
+  static const String _remoteUrl = 'https://pns-api.probably-anything.com';
+
+  static String get _baseUrl {
+    if (kIsWeb && kReleaseMode) {
+      return '/pns-api';
+    }
+    return _remoteUrl;
+  }
 
   Future<Map<String, dynamic>> _get(String path) async {
     final response = await http.get(Uri.parse('$_baseUrl$path'));

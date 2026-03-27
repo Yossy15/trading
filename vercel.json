@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/pns-api/:path*",
+      "destination": "https://pns-api.probably-anything.com/:path*"
+    }
+  ]
+}
