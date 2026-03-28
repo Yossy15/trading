@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shimmer/shimmer.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
 import '../widgets/stat_card.dart';
@@ -112,18 +113,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: _loading
           ? _buildLoading()
           : _error != null
-          ? _buildError()
+          ? _buildDashboard()
           : _buildDashboard(),
     );
   }
 
   Widget _buildLoading() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Assets.images.logo.image()],
-      ),
-    );
+    return (MediaQuery.of(context).size.width < 600)
+        ? Container(
+            color: Colors.black,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [Assets.images.logo.image(width: 150)],
+              ),
+            ),
+          )
+        : Container(
+            color: Colors.black,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [Assets.images.logo.image(width: 400)],
+              ),
+            ),
+          );
   }
 
   Widget _buildError() {
@@ -221,7 +235,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Expanded(
                                   child: _portfolio != null
                                       ? PortfolioSection(portfolio: _portfolio!)
-                                      : const SizedBox.shrink(),
+                                      : Shimmer.fromColors(
+                                          baseColor: Colors.white.withAlpha(8),
+                                          highlightColor: Colors.white
+                                              .withAlpha(20),
+                                          child: Container(
+                                            constraints: const BoxConstraints(
+                                              maxHeight: 600,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withAlpha(
+                                                128,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              border: Border.all(
+                                                color: Colors.white.withAlpha(
+                                                  20,
+                                                ),
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ],
                             ),
@@ -293,16 +329,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   child: StrategyTable(scores: _strategies),
                                 ),
                                 const SizedBox(width: 16),
-                                if (_portfolio != null)
-                                  Container(
-                                    width: cardWidth,
-                                    constraints: const BoxConstraints(
-                                      maxHeight: 600,
-                                    ),
-                                    child: PortfolioSection(
-                                      portfolio: _portfolio!,
-                                    ),
-                                  ),
+                                (_portfolio != null)
+                                    ? Container(
+                                        width: cardWidth,
+                                        constraints: const BoxConstraints(
+                                          maxHeight: 600,
+                                        ),
+                                        child: PortfolioSection(
+                                          portfolio: _portfolio!,
+                                        ),
+                                      )
+                                    : Shimmer.fromColors(
+                                        baseColor: Colors.white.withAlpha(8),
+                                        highlightColor: Colors.white.withAlpha(
+                                          20,
+                                        ),
+                                        child: Container(
+                                          width: cardWidth,
+                                          constraints: const BoxConstraints(
+                                            maxHeight: 600,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.white.withAlpha(20),
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                 const SizedBox(width: 16),
                                 Container(
                                   width: cardWidth,
@@ -392,36 +450,74 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: _buildTimeInfo(),
           ),
         // Status badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.greenAccent.withAlpha(20),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.greenAccent.withAlpha(60)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.greenAccent,
-                  shape: BoxShape.circle,
+        (_stats?.strategiesActive ?? 0) > 0
+            ? Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent.withAlpha(20),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.greenAccent.withAlpha(60)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.greenAccent,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'ACTIVE',
+                      style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.redAccent.withAlpha(20),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.redAccent.withAlpha(60)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.redAccent,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'INACTIVE',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 6),
-              const Text(
-                'ACTIVE',
-                style: TextStyle(
-                  color: Colors.greenAccent,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
+
         const SizedBox(width: 12),
         IconButton(
           icon: const Icon(Icons.refresh, color: Colors.white54),
@@ -673,46 +769,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            StatCard(
-              icon: Icons.psychology,
-              label: 'Total Decisions',
-              value: '${_stats?.totalDecisions ?? 0}',
-              color: const Color(0xFF64B5F6),
-              subtitle: 'All Time',
-            ),
-            StatCard(
-              icon: Icons.today,
-              label: 'Today\'s Decisions',
-              value: '$todayTotal',
-              color: const Color(0xFFFFD700),
-              subtitle:
-                  'B:${_stats?.todayDecisions['BUY'] ?? 0} S:${_stats?.todayDecisions['SELL'] ?? 0} H:${_stats?.todayDecisions['HOLD'] ?? 0}',
-            ),
-            StatCard(
-              icon: Icons.pause_circle_outline,
-              label: 'Hold Rate',
-              value: '${_stats?.holdRate ?? 0}%',
-              color: Colors.white54,
-            ),
-            StatCard(
-              icon: Icons.merge_type,
-              label: 'Avg Confluence',
-              value: '${_stats?.avgConfluence ?? 0}',
-              color: Colors.purpleAccent,
-            ),
-            StatCard(
-              icon: Icons.emoji_events,
-              label: 'Win Rate',
-              value: '${_portfolio?.winRate ?? 0}%',
-              color: Colors.greenAccent,
-              subtitle: _portfolio?.profitable == true ? '✅ Profitable' : '',
-            ),
-            StatCard(
-              icon: Icons.open_in_new,
-              label: 'Open Positions',
-              value: '${_portfolio?.openPositions ?? 0}',
-              color: Colors.orangeAccent,
-            ),
+            if (todayTotal == 0) ...[
+              for (int i = 0; i < 6; i++) ...[_buildTotalCardEmpty()],
+            ] else ...[
+              StatCard(
+                icon: Icons.psychology,
+                label: 'Total Decisions',
+                value: '${_stats?.totalDecisions ?? 0}',
+                color: const Color(0xFF64B5F6),
+                subtitle: 'All Time',
+              ),
+              StatCard(
+                icon: Icons.today,
+                label: 'Today\'s Decisions',
+                value: '$todayTotal',
+                color: const Color(0xFFFFD700),
+                subtitle:
+                    'B:${_stats?.todayDecisions['BUY'] ?? 0} S:${_stats?.todayDecisions['SELL'] ?? 0} H:${_stats?.todayDecisions['HOLD'] ?? 0}',
+              ),
+              StatCard(
+                icon: Icons.pause_circle_outline,
+                label: 'Hold Rate',
+                value: '${_stats?.holdRate ?? 0}%',
+                color: Colors.white54,
+              ),
+              StatCard(
+                icon: Icons.merge_type,
+                label: 'Avg Confluence',
+                value: '${_stats?.avgConfluence ?? 0}',
+                color: Colors.purpleAccent,
+              ),
+              StatCard(
+                icon: Icons.emoji_events,
+                label: 'Win Rate',
+                value: '${_portfolio?.winRate ?? 0}%',
+                color: Colors.greenAccent,
+                subtitle: _portfolio?.profitable == true ? '✅ Profitable' : '',
+              ),
+              StatCard(
+                icon: Icons.open_in_new,
+                label: 'Open Positions',
+                value: '${_portfolio?.openPositions ?? 0}',
+                color: Colors.orangeAccent,
+              ),
+            ],
           ],
         );
       },
@@ -753,10 +853,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Flexible(
             fit: FlexFit.loose,
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _journal.map((j) => JournalCard(entry: j)).toList(),
-              ),
+              child: _journal.isEmpty
+                  ? _buildEmptyState()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _journal
+                          .map((j) => JournalCard(entry: j))
+                          .toList(),
+                    ),
             ),
           ),
         ],
@@ -767,7 +871,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ─── Regime Distribution ─────────────────────────────────
   Widget _buildRegimeSection() {
     if (_stats == null || _stats!.regimeDistribution.isEmpty)
-      return const SizedBox.shrink();
+      return Shimmer.fromColors(
+        baseColor: Colors.white.withAlpha(8),
+        highlightColor: Colors.white.withAlpha(20),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 600),
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(128),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withAlpha(20), width: 1),
+          ),
+        ),
+      );
     final total = _stats!.regimeDistribution.fold(0, (a, e) => a + e.count);
 
     return Container(
@@ -910,5 +1025,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
           (w) => w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1)}' : '',
         )
         .join(' ');
+  }
+
+  _buildEmptyState() {
+    return Shimmer.fromColors(
+      baseColor: Colors.white.withAlpha(15),
+      highlightColor: Colors.white.withAlpha(30),
+      child: Column(
+        children: [
+          for (int i = 0; i < 11; i++) ...[
+            const SizedBox(height: 14),
+            Shimmer.fromColors(
+              baseColor: Colors.white.withAlpha(20),
+              highlightColor: Colors.white.withAlpha(50),
+              child: Container(
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(128),
+                  borderRadius: BorderRadius.circular(12),
+                  // border: Border.all(color: Colors.white.withAlpha(20), width: 1),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  _buildTotalCardEmpty() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.white.withAlpha(30), Colors.white.withAlpha(10)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withAlpha(60), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Shimmer.fromColors(
+            baseColor: Colors.white.withAlpha(15),
+            highlightColor: Colors.white.withAlpha(30),
+            child: Container(
+              height: 28,
+              width: 28,
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(128),
+                borderRadius: BorderRadius.circular(5),
+                // border: Border.all(color: Colors.white.withAlpha(20), width: 1),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Shimmer.fromColors(
+            baseColor: Colors.white.withAlpha(15),
+            highlightColor: Colors.white.withAlpha(30),
+            child: Container(
+              height: 24,
+              // width: 24,
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(128),
+                borderRadius: BorderRadius.circular(12),
+                // border: Border.all(color: Colors.white.withAlpha(20), width: 1),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

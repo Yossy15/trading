@@ -15,10 +15,7 @@ class PortfolioSection extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withAlpha(8),
-            Colors.white.withAlpha(3),
-          ],
+          colors: [Colors.white.withAlpha(8), Colors.white.withAlpha(3)],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withAlpha(20), width: 1),
@@ -32,7 +29,11 @@ class PortfolioSection extends StatelessWidget {
               SizedBox(width: 8),
               Text(
                 'Portfolio Overview',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -56,14 +57,22 @@ class PortfolioSection extends StatelessWidget {
                             value: portfolio.wins.toDouble(),
                             color: Colors.greenAccent,
                             title: '${portfolio.wins}',
-                            titleStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                            titleStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
                             radius: 28,
                           ),
                           PieChartSectionData(
                             value: portfolio.losses.toDouble(),
                             color: Colors.redAccent,
                             title: '${portfolio.losses}',
-                            titleStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                            titleStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
                             radius: 28,
                           ),
                           if (portfolio.breakevens > 0)
@@ -71,7 +80,11 @@ class PortfolioSection extends StatelessWidget {
                               value: portfolio.breakevens.toDouble(),
                               color: Colors.white38,
                               title: '${portfolio.breakevens}',
-                              titleStyle: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                              titleStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
                               radius: 28,
                             ),
                         ],
@@ -82,9 +95,16 @@ class PortfolioSection extends StatelessWidget {
                       children: [
                         Text(
                           '${portfolio.winRate}%',
-                          style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        const Text('Win Rate', style: TextStyle(color: Colors.white54, fontSize: 10)),
+                        const Text(
+                          'Win Rate',
+                          style: TextStyle(color: Colors.white54, fontSize: 10),
+                        ),
                       ],
                     ),
                   ],
@@ -100,25 +120,44 @@ class PortfolioSection extends StatelessWidget {
                     const SizedBox(height: 8),
                     _legendItem('Losses', portfolio.losses, Colors.redAccent),
                     const SizedBox(height: 8),
-                    _legendItem('Breakeven', portfolio.breakevens, Colors.white38),
+                    _legendItem(
+                      'Breakeven',
+                      portfolio.breakevens,
+                      Colors.white38,
+                    ),
                     const SizedBox(height: 16),
                     _infoRow('Total Trades', '${portfolio.totalTrades}'),
                     _infoRow('Open Positions', '${portfolio.openPositions}'),
-                    _infoRow('Streak', '${portfolio.streakCount} ${portfolio.streakType}'),
-                    _infoRow('Avg W/L Ratio', portfolio.avgWinLossRatio.toStringAsFixed(2)),
+                    _infoRow(
+                      'Streak',
+                      '${portfolio.streakCount} ${portfolio.streakType}',
+                    ),
+                    _infoRow(
+                      'Avg W/L Ratio',
+                      portfolio.avgWinLossRatio.toStringAsFixed(2),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          const Text('Recent Trades', style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600)),
+          const Text(
+            'Recent Trades',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 10),
           // Recent results row
           Wrap(
             spacing: 4,
             runSpacing: 4,
-            children: portfolio.recentResults.map((r) => _resultDot(r)).toList(),
+            children: portfolio.recentResults
+                .map((r) => _resultDot(r))
+                .toList(),
           ),
           const SizedBox(height: 16),
           // Trades list
@@ -126,7 +165,9 @@ class PortfolioSection extends StatelessWidget {
             fit: FlexFit.loose,
             child: SingleChildScrollView(
               child: Column(
-                children: portfolio.recentTrades.map((t) => _tradeRow(t)).toList(),
+                children: portfolio.recentTrades
+                    .map((t) => _tradeRow(t))
+                    .toList(),
               ),
             ),
           ),
@@ -138,9 +179,19 @@ class PortfolioSection extends StatelessWidget {
   Widget _legendItem(String label, int value, Color color) {
     return Row(
       children: [
-        Container(width: 12, height: 12, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3))),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(3),
+          ),
+        ),
         const SizedBox(width: 8),
-        Text('$label: $value', style: const TextStyle(color: Colors.white70, fontSize: 13)),
+        Text(
+          '$label: $value',
+          style: const TextStyle(color: Colors.white70, fontSize: 13),
+        ),
       ],
     );
   }
@@ -151,8 +202,18 @@ class PortfolioSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Colors.white38, fontSize: 12)),
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white38, fontSize: 12),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );
@@ -162,8 +223,8 @@ class PortfolioSection extends StatelessWidget {
     final color = r.outcome == 'win'
         ? Colors.greenAccent
         : r.outcome == 'loss'
-            ? Colors.redAccent
-            : Colors.white38;
+        ? Colors.redAccent
+        : Colors.white38;
     return Container(
       width: 20,
       height: 20,
@@ -175,7 +236,11 @@ class PortfolioSection extends StatelessWidget {
       child: Center(
         child: Text(
           r.direction[0],
-          style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -184,8 +249,14 @@ class PortfolioSection extends StatelessWidget {
   Widget _tradeRow(RecentTrade t) {
     final isWin = t.outcome == 'win';
     final isLoss = t.outcome == 'loss';
-    final color = isWin ? Colors.greenAccent : isLoss ? Colors.redAccent : Colors.white54;
-    final profitStr = t.profit >= 0 ? '+${t.profit.toStringAsFixed(2)}' : t.profit.toStringAsFixed(2);
+    final color = isWin
+        ? Colors.greenAccent
+        : isLoss
+        ? Colors.redAccent
+        : Colors.white54;
+    final profitStr = t.profit >= 0
+        ? '+${t.profit.toStringAsFixed(2)}'
+        : t.profit.toStringAsFixed(2);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
@@ -203,9 +274,16 @@ class PortfolioSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t.openTime.length >= 16 ? t.openTime.substring(5) : t.openTime,
-                    style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                Text('${t.durationMin} min', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                Text(
+                  t.openTime.length >= 16
+                      ? t.openTime.substring(5)
+                      : t.openTime,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+                Text(
+                  '${t.durationMin} min',
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
               ],
             ),
           ),
@@ -247,8 +325,8 @@ class PortfolioSection extends StatelessWidget {
     final color = outcome == 'win'
         ? Colors.greenAccent
         : outcome == 'loss'
-            ? Colors.redAccent
-            : Colors.white54;
+        ? Colors.redAccent
+        : Colors.white54;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -257,7 +335,11 @@ class PortfolioSection extends StatelessWidget {
       ),
       child: Text(
         outcome.toUpperCase(),
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w700),
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
